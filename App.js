@@ -22,6 +22,7 @@ class App extends Component {
     super(props);
     this.handleChoosePhoto = this.handleChoosePhoto.bind(this);
     this.scaleHeight = this.scaleHeight.bind(this);
+    this.renderInfo = this.renderInfo.bind(this);
 
     this.state = {
       passportImage: undefined,
@@ -77,14 +78,19 @@ class App extends Component {
   _loadValue = async () => {
     let passportImage, imageHeight, imageWidth;
     try {
-      await AsyncStorage.removeItem('@PassportStore:passportImage');
+      //await AsyncStorage.removeItem('@PassportStore:passportImage');
       passportImage = await AsyncStorage.getItem(
         '@PassportStore:passportImage',
       );
       imageHeight = await AsyncStorage.getItem('@PassportStore:imageHeight');
       imageWidth = await AsyncStorage.getItem('@PassportStore:imageWidth');
+      console.log('got data');
+      console.log(passportImage);
+      console.log(imageHeight);
+
     } catch (error) {
       // Error retrieving data
+      console.log('did not get data');
     }
 
     if (passportImage !== '') {
@@ -192,6 +198,15 @@ class App extends Component {
     );
   }
 
+  renderInfo() {
+    return (
+      <Text style={styles.helpText}>
+        this.state.passportImage: {this.state.passportImage}
+        this.state.imageExists: {this.state.imageExists}
+      </Text>
+    )
+  }
+
   render() {
     let passportImage, imageHeight;
     if (this.state.passportImage !== undefined) {
@@ -239,7 +254,7 @@ class App extends Component {
                   📄
                 </Text>
                 <Text style={[styles.welcomeText, {fontWeight: 'bold', fontSize: 24}]}>
-                  Passport wallet
+                  Image wallet
                 </Text>
                 <Text style={styles.welcomeText}>
                   An easy way to show a screenshot of important documents.
@@ -255,7 +270,7 @@ class App extends Component {
                 </View>
               </View>
               <View>
-                <TouchableOpacity onPress={this.openLink}>
+                <TouchableOpacity onPress={this.openLink} style={{display: 'none'}}>
                   <Text style={styles.helpText}>
                     To get a screenshot of your BC vaccine passport,
                     follow instructions at{' '}
